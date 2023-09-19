@@ -1,10 +1,11 @@
-# 네이버 쇼핑 크롤링 무한 스크롤
+# 네이버 쇼핑 크롤링 무한 스크롤 => csv 파일로 저장하기
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+import csv
 
 # 크롬 드라이버 자동 업데이트
 from webdriver_manager.chrome import ChromeDriverManager
@@ -62,6 +63,10 @@ while True:
     break
   before_h = after_h
 
+# 파일 생성
+f = open(r"C:\Users\withbrother\Desktop\python_test2\chapter3\네이버쇼핑몰크롤링TEST.csv", 'w', encoding='CP949', newline='')
+csvWriter = csv.writer(f)
+
 # 상품 정보 div
 items = driver.find_elements(By.CSS_SELECTOR, '.product_item__MDtDF')
 
@@ -71,3 +76,8 @@ for item in items:
   price = item.find_element(By.CSS_SELECTOR, 'span.price_num__S2p_v > em').text
   link = item.find_element(By.CSS_SELECTOR, 'div.product_title__Mmw2K > a').get_attribute('href')
   print(name, price, link)
+  # 데이터 저장
+  csvWriter.writerow([name, price, link])
+
+# 파일 닫기
+f.close()
