@@ -3,6 +3,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+import time
 
 response = requests.get('https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90')
 html = response.text
@@ -19,4 +20,15 @@ for a in articles:
     if len(links) >= 2:
         # 두번째 링크의 href를 추출
         url = links[1].attrs['href']
-        print(url)
+        # print(url)
+
+        # requests 다시 보내기
+        response = requests.get(url)
+        # response = requests.get(url, headers={'User-agent': 'Mozila/5.0'})
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+        # print(soup)
+        
+        content = soup.select_one('#dic_area')
+        print(content.text)
+        time.sleep(0.3)
