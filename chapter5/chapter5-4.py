@@ -1,11 +1,19 @@
 # 광고 상품 제외하기
 # 검색어 변경하기
 # 상품 100개만 출력하기
+# 엑셀에 저장하기
 import requests
 from bs4 import BeautifulSoup
+import openpyxl
 
 keyword = input('검색어를 입력하세요 >>> ')
 page_num = int(input('몇 페이지까지 추출하시겠습니까? '))
+
+wb = openpyxl.Workbook()
+# wb = openpyxl.Workbook('chapter5/coupang_result.xlsx')
+ws = wb.create_sheet(keyword, 0)
+# ws = wb.create_sheet(keyword)
+ws.append(['순위', '브랜드명', '상품명', '가격', '상세페이지링크'])
 
 rank = 1
 done = False
@@ -62,6 +70,7 @@ for i in range(1, page_num):
                 price = 0
 
             print(rank, brand_name, product_name, price)
+            ws.append([rank, brand_name, product_name, price, sub_url])
 
             # time.sleep(0.3)
 
@@ -69,3 +78,8 @@ for i in range(1, page_num):
             if rank > 100:
                 done = True
                 break
+
+file_name = input('파일 이름을 입력하세요 >>> ')
+# wb.save(rf'C:\Users\withbrother\Desktop\python_test2\chapter5\coupang_{file_name}.xlsx')
+wb.save(f'chapter5/coupang_{file_name}.xlsx')
+# wb.save('chapter5/coupang_result.xlsx')
