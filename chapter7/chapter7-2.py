@@ -83,6 +83,15 @@ selectBox.click()
 select50 = driver.find_element(By.CSS_SELECTOR, '#listSizeSelectDiv > ul > li:nth-child(7) > a')
 select50.click()
 
+s = driver.find_element(By.CSS_SELECTOR, 'a#currentSearchByTop')
+s.click()
+
+st = driver.find_element(By.CSS_SELECTOR, '#sl_general > li:nth-child(2) > a')
+st.click()
+
+b = driver.find_element(By.CSS_SELECTOR, '#main-area > div.search_result > div:nth-child(1) > form > div.input_search_area > button')
+b.click()
+
 res = driver.page_source
 soup = BeautifulSoup(res, 'html.parser')
 
@@ -97,7 +106,22 @@ for l in lists:
     # for t in id:
     #     print(t.text)
     title = l.select_one('a.article').text.strip()
-    print(id, title)
+    # print(id, title)
+
+print(len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a')))
+# 10 이상일 경우 다음 버튼 눌러야 함
+
+# if i < 9:
+#         # i += 1
+#         # print('i += 1???', i)
+#         driver.find_element(By.XPATH, f'//*[@id="main-area"]/div[7]/a[{i}+1]').click()
+#         # print('driver[i]???', i)
+#         if i == 10:
+#             break
+#main-area > div.prev-next > a:nth-child(3)
+
+# //*[@id="main-area"]/div[7]/a[1]
+# //*[@id="main-area"]/div[7]/a[2]
 
 #main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr:nth-child(1)
 #main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr:nth-child(2)
