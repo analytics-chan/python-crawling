@@ -10,7 +10,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 keyword = input('검색어를 입력하세요 >>> ')
-url = f"https://map.naver.com/p/search/{keyword}/place/33084820?c=15.00,0,0,0,dh&isCorrectAnswer=true"
+url = f"https://map.naver.com/p/search/{keyword}"
+# url = f"https://map.naver.com/p/search/{keyword}/place/33084820?c=15.00,0,0,0,dh&isCorrectAnswer=true"
 
 wb = openpyxl.Workbook()
 ws = wb.create_sheet(keyword, 0)
@@ -91,9 +92,13 @@ for i, l in enumerate(list, 1):
     # visit = l.find_element(By.XPATH, f'//*[@id="app-root"]/div/div/div/div[7]/div[3]/div[3]/div[1]/ul/li[{i}]/div[3]/div/div[2]/span[2]').text
     visit = l.find_element(By.CSS_SELECTOR, f'#app-root > div > div > div > div:nth-child(7) > div:nth-child(3) > div.place_section.k5tcc > div.place_section_content > ul > li:nth-child({i}) > div.qM6I7 > div > div._7kR3e > span:nth-child(2)').text
     # pay = l.find_element(By.XPATH, f'//*[@id="app-root"]/div/div/div/div[7]/div[3]/div[3]/div[1]/ul/li[{i}]/div[3]/div/div[2]/span[3]').text
-    pay = l.find_element(By.CSS_SELECTOR, f'#app-root > div > div > div > div:nth-child(7) > div:nth-child(3) > div.place_section.k5tcc > div.place_section_content > ul > li:nth-child({i}) > div.qM6I7 > div > div._7kR3e > span:nth-child(3)').text
 
-    payment = pay.replace('인증 수단', '').strip()
+    try:
+        pay = l.find_element(By.CSS_SELECTOR, f'#app-root > div > div > div > div:nth-child(7) > div:nth-child(3) > div.place_section.k5tcc > div.place_section_content > ul > li:nth-child({i}) > div.qM6I7 > div > div._7kR3e > span:nth-child(3)').text
+
+        payment = pay.replace('인증 수단', '').strip()
+    except:
+        payment = "인증 수단 없음"
 
     # print(writer, review_len, comment, date, visit)
 
