@@ -40,9 +40,10 @@ time.sleep(2)
 
 driver.switch_to.frame("entryIframe")
 
-# driver.find_element(By.CSS_SELECTOR, 'body').send_keys(Keys.END)
+#iframe 밖으로 나오기
+#browser.switch_to.default_content()
 
-# driver.switch_to.frame("cafe_main")
+# driver.find_element(By.CSS_SELECTOR, 'body').send_keys(Keys.END)
 
 time.sleep(2)
 
