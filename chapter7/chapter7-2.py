@@ -83,33 +83,116 @@ selectBox.click()
 select50 = driver.find_element(By.CSS_SELECTOR, '#listSizeSelectDiv > ul > li:nth-child(7) > a')
 select50.click()
 
-s = driver.find_element(By.CSS_SELECTOR, 'a#currentSearchByTop')
-s.click()
+select_options = input('옵션을 선택해주세요. (옵션 1, 2) \n 1. 게시글+댓글 2. 제목만 >>> ')
 
-st = driver.find_element(By.CSS_SELECTOR, '#sl_general > li:nth-child(2) > a')
-st.click()
+# res = driver.page_source
+# soup = BeautifulSoup(res, 'html.parser')
 
-b = driver.find_element(By.CSS_SELECTOR, '#main-area > div.search_result > div:nth-child(1) > form > div.input_search_area > button')
-b.click()
+if select_options == '1':
+    s = driver.find_element(By.CSS_SELECTOR, 'a#currentSearchByTop')
+    s.click()
 
-res = driver.page_source
-soup = BeautifulSoup(res, 'html.parser')
+    st = driver.find_element(By.CSS_SELECTOR, '#sl_general > li:nth-child(1) > a')
+    st.click()
 
-lists = soup.select('#main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr')
+    b = driver.find_element(By.CSS_SELECTOR, '#main-area > div.search_result > div:nth-child(1) > form > div.input_search_area > button')
+    b.click()
+
+    # res = driver.page_source
+    # soup = BeautifulSoup(res, 'html.parser')
+
+    # lists = soup.select('#main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr')
+elif select_options == '2':
+    s = driver.find_element(By.CSS_SELECTOR, 'a#currentSearchByTop')
+    s.click()
+
+    st = driver.find_element(By.CSS_SELECTOR, '#sl_general > li:nth-child(2) > a')
+    st.click()
+
+    b = driver.find_element(By.CSS_SELECTOR, '#main-area > div.search_result > div:nth-child(1) > form > div.input_search_area > button')
+    b.click()
+
+    # res = driver.page_source
+    # soup = BeautifulSoup(res, 'html.parser')
+    
+    # lists = soup.select('#main-area > div:nth-child(5) > table > tbody > tr')
+
+time.sleep(2)
+
+page_len = len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a'))
+
+for i in range(1, page_len + 1):
+    res = driver.page_source
+    soup = BeautifulSoup(res, 'html.parser')
+
+    if select_options == '1':
+        lists = soup.select('#main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr')
+    elif select_options == '2':
+        lists = soup.select('#main-area > div:nth-child(5) > table > tbody > tr')
+
+    print(i, '페이지')
+
+    for j, l in enumerate(lists, 1):
+        # id = l.select_one('div.inner_number').text
+        id = l.select_one('div.board-number > div').text
+        
+        # for t in id:
+        #     print(t.text)
+        title = l.select_one('a.article').text.strip()
+
+        print(id, title)
+
+        # page_len = len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a'))
+#main-area > div.prev-next > a.pgR
+#main-area > div.prev-next > a.on
+    if i < page_len:
+        driver.find_element(By.XPATH, f'//*[@id="main-area"]/div[7]/a[{i}+1]').click()
+        if i == 11:
+            driver.find_element(By.XPATH, '#main-area > div.prev-next > a.pgR').click()
+        elif i == page_len + 1:
+            break
+
+#main-area > div:nth-child(5) > table > tbody > tr:nth-child(7) > td.td_article > div.board-number > div
+#main-area > div:nth-child(5) > table > tbody > tr:nth-child(10) > td.td_article > div.board-number > div
+
+# https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=10912875&search.media=0&search.searchdate=all&search.defaultValue=1&search.exact=&search.include=&userDisplay=50&search.exclude=&search.option=0&search.sortBy=date&search.searchBy=0&search.includeAll=&search.query=%B9%CC%B4%CF%BD%AC&search.viewtype=title&search.page=11
+# lists = soup.select('#main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr')
+
 #main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr:nth-child(1)
 #main-area > div.article-board.result-board.m-tcol-c > table > tbody > tr:nth-child(2)
+#main-area > div:nth-child(5) > table > tbody > tr:nth-child(1)
+#main-area > div:nth-child(5) > table > tbody > tr:nth-child(2)
 
 # print(lists)
 
-for l in lists:
-    id = l.select_one('div.inner_number').text
-    # for t in id:
-    #     print(t.text)
-    title = l.select_one('a.article').text.strip()
-    # print(id, title)
+# for i, l in enumerate(lists, 1):
+#     id = l.select_one('div.inner_number').text
+#     # for t in id:
+#     #     print(t.text)
+#     title = l.select_one('a.article').text.strip()
 
-print(len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a')))
+#     print(i, '페이지')
+#     print(id, title)
+
+#     page_len = len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a'))
+
+#     if i < page_len:
+#         driver.find_element(By.XPATH, f'//*[@id="main-area"]/div[7]/a[{i}+1]').click()
+
+#         if i == page_len:
+#             break
+
+    # if page_len > 10:
+    #     next_btn = driver.find_element(By.XPATH, f'//*[@id="main-area"]/div[7]/a[{i}+1]').click()
+    #     next_btn.click()
+
+# page_len = len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a'))
+# print(len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a')))
 # 10 이상일 경우 다음 버튼 눌러야 함
+
+# if page_len > 10:
+#     next_btn = driver.find_element(By.XPATH, '//*[@id="main-area"]/div[7]/a[11]')
+#     next_btn.click()
 
 # if i < 9:
 #         # i += 1
