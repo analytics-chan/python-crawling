@@ -2,9 +2,13 @@
 import requests
 from bs4 import BeautifulSoup
 
+# HTTP 302 방식
 url = "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http://finance.naver.com/sise/sise_market_sum.naver&fieldIds=quant&fieldIds=per&fieldIds=roe&fieldIds=pbr&fieldIds=reserve_ratio"
 
 # "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http://finance.naver.com/sise/sise_market_sum.naver&fieldIds=quant&fieldIds=per&fieldIds=roe&fieldIds=pbr&fieldIds=reserve_ratio"
+
+# 페이지 처리
+# "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http://finance.naver.com/sise/sise_market_sum.naver?&page=2&fieldIds=quant&fieldIds=per&fieldIds=roe&fieldIds=pbr&fieldIds=reserve_ratio"
 
 response = requests.get(url)
 html = response.text
