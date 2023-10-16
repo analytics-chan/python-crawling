@@ -79,8 +79,9 @@ driver.find_element(By.CSS_SELECTOR, '#listSizeSelectDiv > ul > li:nth-child(7) 
 
 #     time.sleep(1)
 
-# 1 ~ 998페이지까지 크롤링
-for i in range(2, 1000):
+# 1 ~ 998페이지까지 크롤링 + 1000페이지까지 크롤링
+for i in range(2, 1002):
+# for i in range(2, 5):
     res = driver.page_source
     soup = BeautifulSoup(res, 'html.parser')
 
@@ -104,18 +105,26 @@ for i in range(2, 1000):
         except:
             review_count = 0
 
-        # 가입인사 카테고리 제외
-        if cate != '가입인사':
+        # 가입인사 카테고리 제외 + 출석체크도 제외
+        if cate != '가입인사' and cate != '출석체크':
             # print(cate, title.replace('\n', '').replace('         ', ''), review_count, writer, date, view_count)
             ws.append([cate, title.replace('\n', '').replace('         ', ''), int(review_count), writer, date, view_count])
 
         # time.sleep(1)
 
-    if i%10 == 1:
-        driver.find_element(By.CLASS_NAME, 'pgR').click()
-    else:
-        driver.find_element(By.LINK_TEXT, str(i)).click()
+    try:            
+        if i%10 == 1:
+            driver.find_element(By.CLASS_NAME, 'pgR').click()
+        else:
+            if i == 1000:
+                i = '1,000'
+                driver.find_element(By.LINK_TEXT, str(i)).click()
+            else:
+                driver.find_element(By.LINK_TEXT, str(i)).click()
+    except Exception as e:
+        print('----END----')
+        break
 
     time.sleep(1)
 
-wb.save('chapter7/20231013 전체글보기2.xlsx')
+wb.save('chapter7/20231013 전체글보기5.xlsx')
