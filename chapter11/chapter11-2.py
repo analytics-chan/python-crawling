@@ -1,4 +1,4 @@
-# 검색어 입력
+# iframe 대처 방법
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -29,3 +29,15 @@ search.send_keys('강남역 맛집')
 time.sleep(1)
 search.send_keys(Keys.ENTER)
 time.sleep(2)
+
+# iframe 안으로 들어가기
+driver.switch_to.frame('searchIframe')
+
+# iframe 밖으로 나오기
+# driver.switch_to.default_content()
+
+# 가게 이름 10개 가져오기
+names = driver.find_elements(By.CSS_SELECTOR, 'span.place_bluelink.TYaxT')
+# print(names)
+for name in names:
+    print(name.text)
