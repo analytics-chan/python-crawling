@@ -2,6 +2,7 @@
 # 엑셀 내 옵션 소스 추가
 # 조회수 데이터 전처리
 # 작성일자 데이터 전처리
+# 2023-10-18 링크 추가
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -32,19 +33,18 @@ ws1['C4'] = "보기옵션 : 50개씩"
 ws1['C5'] = "페이지 : 1000p"
 ws1['C6'] = "전체글보기(가입인사/출석체크 제외)"
 
-ws1.column_dimensions['C'].width = 15
-ws1.column_dimensions['D'].width = 40
+ws1.column_dimensions['B'].width = 15
+ws1.column_dimensions['C'].width = 40
 
 ws = wb.create_sheet('전체글보기', 0)
 
 ws.column_dimensions['A'].width = 20
 ws.column_dimensions['B'].width = 70
-ws.column_dimensions['D'].width = 25
-ws.column_dimensions['E'].width = 10
+ws.column_dimensions['C'].width = 25
+ws.column_dimensions['E'].width = 20
+ws.column_dimensions['F'].width = 10
 
-ws.append(['카테고리', '제목', '댓글수', '작성자', '작성일', '조회수'])
-
-# url = "https://cafe.naver.com/navercafezz"
+ws.append(['카테고리', '제목', '링크', '댓글수', '작성자', '작성일', '조회수'])
 
 chrome_options = Options()
 chrome_options.add_experimental_option('detach', True)
@@ -87,6 +87,7 @@ for i in range(2, 1002):
             date = tr.select_one('.td_date').text
             # view_count = tr.select_one('.td_view').text
             view_count = tr.select_one('.td_view').text.replace(',', '')
+            link = tr.select_one('a.article').attrs['href']
         except:
             pass
 
@@ -113,7 +114,7 @@ for i in range(2, 1002):
             #     date = date.replace('.', '-')[:-1]
             # # print(date.find('.'))
 
-            ws.append([cate, title.replace('\n', '').replace('         ', ''), int(review_count), writer, date, int(view_count)])
+            ws.append([cate, title.replace('\n', '').replace('         ', ''), url + link, int(review_count), writer, date, int(view_count)])
 
             # 415 페이지에 조회쉬 1.2만 <- 숫자표기 에러
             # ws.append([cate, title.replace('\n', '').replace('         ', ''), int(review_count), writer, date, int(view_count)])

@@ -1,4 +1,5 @@
 # 네이버 카페 '라준사' 키워드 크롤링
+# 2023-10-18 링크 추가
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -9,20 +10,38 @@ from bs4 import BeautifulSoup
 import openpyxl
 
 import time
+import datetime
+
+today = datetime.datetime.today()
+year = str(today.year)
+month = str(today.month)
+day = str(today.day)
+
+url = "https://cafe.naver.com/navercafezz"
 
 # wb = openpyxl.Workbook()
+wb = openpyxl.open('chapter7/20231018 키워드.xlsx')
 
-wb = openpyxl.open('chapter7/20231013 누네안과_키워드.xlsx')
+# ws1 = wb.create_sheet('source', 0)
+
+# ws1['B3'] = "크롤링 주소"
+# ws1['C3'] = url
+# ws1['B4'] = "옵션"
+# ws1['C4'] = "보기옵션 : 50개씩"
+# ws1['C5'] = "키워드별 검색 데이터"
+
+# ws1.column_dimensions['B'].width = 15
+# ws1.column_dimensions['C'].width = 40
+
 # ws = wb.create_sheet('누네안과_키워드', 0)
 ws = wb.create_sheet('비엔빛_키워드', 0)
 
 ws.column_dimensions['A'].width = 70
-ws.column_dimensions['C'].width = 25
-ws.column_dimensions['D'].width = 10
+ws.column_dimensions['B'].width = 25
+ws.column_dimensions['D'].width = 25
+ws.column_dimensions['E'].width = 10
 
-ws.append(['제목', '댓글수', '작성자', '작성일', '조회수', '키워드'])
-
-url = "https://cafe.naver.com/navercafezz"
+ws.append(['제목', '링크', '댓글수', '작성자', '작성일', '조회수', '키워드'])
 
 chrome_options = Options()
 chrome_options.add_experimental_option('detach', True)
@@ -63,7 +82,7 @@ for n in range(0, len(bnb), 1):
 
     page_len = len(driver.find_elements(By.CSS_SELECTOR, '.prev-next > a'))
 
-    print(page_len)
+    # print(page_len)
 
     if page_len == 0:
         print('등록된 게시물이 없습니다.')
@@ -81,7 +100,8 @@ for n in range(0, len(bnb), 1):
                     title = tr.select_one('a.article').text.strip().replace('\n', '').replace('         ', '')
                     writer = tr.select_one('.p-nick > .m-tcol-c').text
                     date = tr.select_one('.td_date').text
-                    view_count = tr.select_one('.td_view').text
+                    view_count = tr.select_one('.td_view').text.replace(',', '')
+                    link = tr.select_one('a.article').attrs['href']
                 except:
                     pass
             
@@ -90,10 +110,18 @@ for n in range(0, len(bnb), 1):
                 except:
                     review_count = 0
 
-                print(title, review_count, writer, date, view_count)
+                if date.find(':') != -1:
+                    date = f'{year}-{month}-{day}'
+                elif date.find('.') != -1:
+                    date = date.replace('.', '-')[:-1]
 
-                # ws.append([title, int(review_count), writer, date, view_count, noon[n]])
-                ws.append([title, int(review_count), writer, date, view_count, bnb[n]])
+                if '만' in view_count:
+                    view_count = float(view_count.replace('만', '')) * 10000
+
+                # print(title, review_count, writer, date, view_count)
+
+                # ws.append([title, url + link, int(review_count), writer, date, int(view_count), noon[n]])
+                ws.append([title, url + link, int(review_count), writer, date, int(view_count), bnb[n]])
 
                 # time.sleep(1)
             try:
@@ -109,5 +137,5 @@ for n in range(0, len(bnb), 1):
 
     # time.sleep(1)
 
-# wb.save('chapter7/20231013 누네안과_키워드.xlsx')
-wb.save('chapter7/20231016 키워드.xlsx')
+wb.save(f'chapter7/{year}{month}{day} 키워드.xlsx')
+# wb.save('chapter7/20231016 키워드.xlsx')
