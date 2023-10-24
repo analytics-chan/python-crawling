@@ -19,22 +19,22 @@ day = str(today.day)
 
 url = "https://cafe.naver.com/navercafezz"
 
-# wb = openpyxl.Workbook()
-wb = openpyxl.open('chapter7/20231018 키워드.xlsx')
+wb = openpyxl.Workbook()
+# wb = openpyxl.open(f'chapter7/{year}{month}{day} 키워드.xlsx')
 
-# ws1 = wb.create_sheet('source', 0)
+ws1 = wb.create_sheet('source', 0)
 
-# ws1['B3'] = "크롤링 주소"
-# ws1['C3'] = url
-# ws1['B4'] = "옵션"
-# ws1['C4'] = "보기옵션 : 50개씩"
-# ws1['C5'] = "키워드별 검색 데이터"
+ws1['B3'] = "크롤링 주소"
+ws1['C3'] = url
+ws1['B4'] = "옵션"
+ws1['C4'] = "보기옵션 : 50개씩"
+ws1['C5'] = "키워드별 검색 데이터"
 
-# ws1.column_dimensions['B'].width = 15
-# ws1.column_dimensions['C'].width = 40
+ws1.column_dimensions['B'].width = 15
+ws1.column_dimensions['C'].width = 40
 
-# ws = wb.create_sheet('누네안과_키워드', 0)
-ws = wb.create_sheet('비엔빛_키워드', 0)
+ws = wb.create_sheet('누네안과_키워드', 0)
+# ws = wb.create_sheet('비엔빛_키워드', 0)
 
 ws.column_dimensions['A'].width = 70
 ws.column_dimensions['B'].width = 25
@@ -59,17 +59,17 @@ noon = ['누네안과', 'ㄴㄴ안과', 'ㄴㄴ', '강남누네', '강남ㄴㄴ'
 bnb = ['비앤빛안과', 'ㅂㅇㅂ안과', 'ㅂㅇㅂ', '강남비앤빛', '강남ㅂㅇㅂ', '비앤비안과', '압구정안과', 'ㅇㄱㅈ안과', '서울밝은세상안과', 'ㅅㅇㅂㅇㅅㅅ안과', '밝은세상안과', 'ㅂㅇㅅㅅ안과', '눈에미소안과', 'ㄴㅇㅁㅅ안과', '에스앤유안과', 'ㅇㅅㅇㅇ안과', '아이리움안과', 'ㅇㅇㄹㅇ안과', '밝은눈안과', 'ㅂㅇㄴ안과', '누네빛안과', 'ㄴㄴㅂ안과', '파티마안과', 'ㅍㅌㅁ안과', '온누리안과', 'ㅇㄴㄹ안과', '밝은누리안과', 'ㅂㅇㄴㄹ안과', '메트로안과', 'ㅁㅌㄹ안과', '밝은눈안과', 'ㅂㅇㄴ안과', '스마일프로', '비쥬맥스800', 'visumax800']
 # print(len(bnb))
 
-# for n in range(0, len(noon), 1):
-for n in range(0, len(bnb), 1):
-    # print(noon[n])
-    print(bnb[n])
+for n in range(0, len(noon), 1):
+# for n in range(0, len(bnb), 1):
+    print(noon[n])
+    # print(bnb[n])
     
     # 검색창 클릭
     search = driver.find_element(By.CSS_SELECTOR, '#topLayerQueryInput')
     search.click()
 
-    # search.send_keys(noon[n])
-    search.send_keys(bnb[n])
+    search.send_keys(noon[n])
+    # search.send_keys(bnb[n])
 
     driver.find_element(By.CSS_SELECTOR, '#cafe-search > form > .btn').click()
 
@@ -120,8 +120,8 @@ for n in range(0, len(bnb), 1):
 
                 # print(title, review_count, writer, date, view_count)
 
-                # ws.append([title, url + link, int(review_count), writer, date, int(view_count), noon[n]])
-                ws.append([title, url + link, int(review_count), writer, date, int(view_count), bnb[n]])
+                ws.append([title, url + link, int(review_count), writer, date, int(view_count), noon[n]])
+                # ws.append([title, url + link, int(review_count), writer, date, int(view_count), bnb[n]])
 
                 # time.sleep(1)
             try:
