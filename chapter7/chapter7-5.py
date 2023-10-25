@@ -23,11 +23,12 @@ url = f'https://play.google.com/store/search?q={keyword}&c=apps&hl=ko-KR'
 wb = openpyxl.Workbook()
 ws = wb.create_sheet(keyword, 0)
 
-ws.column_dimensions['A'].width = 15
-ws.column_dimensions['C'].width = 15
-ws.column_dimensions['D'].width = 70
+ws.column_dimensions['A'].width = 18
+ws.column_dimensions['B'].width = 15
+ws.column_dimensions['D'].width = 10
+ws.column_dimensions['E'].width = 70
 
-ws.append(['닉네임', '별점', '날짜', '코멘트', '유용성'])
+ws.append(['Crawling-Date', 'Nickname', 'Star', 'Create-Date', 'Comment', 'Useful'])
 
 chrome_options = Options()
 chrome_options.add_experimental_option('detach', True)
@@ -47,6 +48,14 @@ driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
 time.sleep(2)
 
 driver.find_element(By.CSS_SELECTOR, '#yDmH0d > c-wiz.SSPGKf.Czez9d > div > div > div.tU8Y5c > div.wkMJlb.YWi3ub > div > div.qZmL0 > div:nth-child(1) > c-wiz:nth-child(4) > section > div > div.Jwxk6d > div:nth-child(5) > div > div > button > span').click()
+
+time.sleep(2)
+
+driver.find_element(By.XPATH, '//*[@id="sortBy_1"]/div[2]').click()
+
+time.sleep(2)
+
+driver.find_element(By.XPATH, '//*[@id="yDmH0d"]/div[5]/div[2]/div/div/div/div/div[2]/div[2]/div/div/span[2]/div[2]').click()
 
 time.sleep(2)
 
@@ -80,7 +89,7 @@ while True:
     print(len(reviews))
 
     try:
-        if len(reviews) >= 1000:
+        if len(reviews) >= 10000:
             break
     except Exception as e:
         print('-----END-----')
@@ -159,7 +168,7 @@ for i, review in enumerate(reviews, 1):
     # time.sleep(1)
 
     print(i, writer, int(star_result), date_result, comment, int(useful_result))
-    ws.append([writer, int(star_result), date_result, comment, int(useful_result)])
+    ws.append([str(today)[:-7], writer, int(star_result), date_result, comment, int(useful_result)])
 
 
 wb.save(f'chapter7/{file_date} {keyword}.xlsx')
