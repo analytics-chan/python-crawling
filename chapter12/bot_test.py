@@ -13,7 +13,8 @@
 import requests
 
 # ga4.sychoi@gmail.com 계정 테스트
-token = "xoxb-6162516044822-6154651620951-L2o9NGTkJtV8toLqgbNNzt6T"
+# token = "xoxb-6162516044822-6154651620951-L2o9NGTkJtV8toLqgbNNzt6T"
+token = 'xoxb-6162516044822-6154651620951-6Dq1Ua15rwfdKMaYgIzXJsGj'
 channel = "#create-error-test-bot"
 text = "슬랙 bot 테스트"
 

@@ -13,9 +13,9 @@ from openpyxl import Workbook, load_workbook
 import requests
 
 # ga4.sychoi@gmail.com 계정 테스트
-token = "xoxb-6162516044822-6154651620951-L2o9NGTkJtV8toLqgbNNzt6T"
+token = "xoxb-6162516044822-6154651620951-6Dq1Ua15rwfdKMaYgIzXJsGj"
 channel = "#create-error-test-bot"
-text = "에러 발생!!! 확인 바랍니다."
+text = "📢 에러 발생!!! 확인 바랍니다."
 
 today = datetime.datetime.today()
 year = str(today.year)
@@ -58,65 +58,89 @@ driver.maximize_window()
 driver.get(url)
 
 try:
-    input_query = driver.find_element(By.CSS_SELECTOR, 'input._searchInput_search_text_3CUDs')
-    input_query.click()
+    # keyword = input('검색어를 입력하세요 >>> ')
+    keyword = input('파일을 붙여넣기 해주세요 >>> ')
 
-    time.sleep(1)
+    wb2 = load_workbook(keyword)
+    sheet = wb2.get_sheet_by_name('Sheet1')
 
-    keyword = input('검색어를 입력하세요 >>> ')
+    key_box = []
 
-    input_query.send_keys(keyword)
-    # input_query.send_keys('비타민')
+    for i in range(1, 100):
+        val = sheet[f'A{i}'].value
 
-    # pyperclip.copy(keyword)
-    # pyperclip.copy('비타민')
-    # pyautogui.hotkey('ctrl', 'v')
+        if val != None:
+            key_box.append(val)
+        else:
+            break
 
-    key_box = driver.find_elements(By.CSS_SELECTOR, 'div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul')
-    # print(len(key_box))
+    print(key_box)
 
-    print('----- 검색창 연관검색어 -----')
-    ws.append(['----- 검색창 연관검색어 -----'])
+    for k in key_box:
+        input_query = driver.find_element(By.CSS_SELECTOR, 'input._searchInput_search_text_3CUDs')
+        input_query.click()
 
-    for i in range(1, len(key_box) + 1):
-        lis = driver.find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
-        # print(len(lis))
+        input_query.clear()
 
-        for l in lis:
-            try:
-                title = l.find_element(By.CSS_SELECTOR, 'em').text
-                # print(title)
-            except:
-                title = l.find_element(By.CSS_SELECTOR, 'li > a').text
-                # print(title)
-            
-            print(title)
-            ws.append([today.now(), keyword, title])
+        time.sleep(1)
 
-    #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(1) > li:nth-child(1)
-    #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(2) > li
-    #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(3) > li:nth-child(1)
+        input_query.send_keys(k)
+        # input_query.send_keys('비타민')
 
-    search = driver.find_element(By.CSS_SELECTOR, 'button._searchInput_button_search_1n1aw')
-    search.click()
+        # pyperclip.copy(keyword)
+        # pyperclip.copy('비타민')
+        # pyautogui.hotkey('ctrl', 'v')
 
-    time.sleep(1)
+        key_box = driver.find_elements(By.CSS_SELECTOR, 'div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul')
+        # print(len(key_box))
 
-    etc_btn = driver.find_element(By.CSS_SELECTOR, 'button.relatedTags_btn_more__Fdsm1')
-    etc_btn.click()
+        print('----- 검색창 연관검색어 -----')
+        ws.append(['----- 검색창 연관검색어 -----'])
 
-    time.sleep(1)
+        for i in range(1, len(key_box) + 1):
+            lis = driver.find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
+            # print(len(lis))
 
-    shopping_keyword = driver.find_elements(By.CSS_SELECTOR, '#container > div.relatedTags_relation_tag__Ct0q2 > div > ul > li')
+            for l in lis:
+                try:
+                    title = l.find_element(By.CSS_SELECTOR, 'em').text
+                    # print(title)
+                except:
+                    title = l.find_element(By.CSS_SELECTOR, 'li > a').text
+                    # print(title)
+                
+                print(title)
+                ws.append([today.now(), keyword, title])
 
-    print('----- 쇼핑연관 검색어 -----')
-    ws.append(['----- 쇼핑연관 검색어 -----'])
+        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(1) > li:nth-child(1)
+        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(2) > li
+        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(3) > li:nth-child(1)
+        time.sleep(1)
 
-    for s in shopping_keyword:
-        shop_title = s.find_element(By.CSS_SELECTOR, 'li > a').text
+        search = driver.find_element(By.CSS_SELECTOR, 'button._searchInput_button_search_1n1aw')
+        search.click()
 
-        print(shop_title)
-        ws.append([today.now(), keyword, shop_title])
+        time.sleep(1)
+
+        etc_btn = driver.find_element(By.CSS_SELECTOR, 'button.relatedTags_btn_more__Fdsm1')
+        etc_btn.click()
+
+        time.sleep(1)
+
+        shopping_keyword = driver.find_elements(By.CSS_SELECTOR, '#container > div.relatedTags_relation_tag__Ct0q2 > div > ul > li')
+
+        print('----- 쇼핑연관 검색어 -----')
+        ws.append(['----- 쇼핑연관 검색어 -----'])
+
+        for s in shopping_keyword:
+            shop_title = s.find_element(By.CSS_SELECTOR, 'li > a').text
+
+            print(shop_title)
+            ws.append([today.now(), keyword, shop_title])
+
+        driver.back()
+
+        time.sleep(1)
 
     print(f'----- {today.now()} 크롤링 종료 -----')
     ws.append([f'----- {str(today.now()).split(".")[0]} 크롤링 종료 -----'])
@@ -130,3 +154,5 @@ except Exception as e:
     data={"channel": channel,"text": text})
 
     print(e)
+
+### 코드 수정 필요함
