@@ -13,7 +13,8 @@ from openpyxl import Workbook, load_workbook
 import requests
 
 # ga4.sychoi@gmail.com 계정 테스트
-token = "xoxb-6162516044822-6154651620951-6Dq1Ua15rwfdKMaYgIzXJsGj"
+# token = "xoxb-6162516044822-6154651620951-6Dq1Ua15rwfdKMaYgIzXJsGj"
+token = 'xoxb-6162516044822-6154651620951-Zq7dWfuX6epWji7OqpNFczlV'
 channel = "#create-error-test-bot"
 text = "📢 에러 발생!!! 확인 바랍니다."
 
@@ -64,19 +65,19 @@ try:
     wb2 = load_workbook(keyword)
     sheet = wb2.get_sheet_by_name('Sheet1')
 
-    key_box = []
+    excel_key = []
 
     for i in range(1, 100):
         val = sheet[f'A{i}'].value
 
         if val != None:
-            key_box.append(val)
+            excel_key.append(val)
         else:
             break
 
-    print(key_box)
+    print(excel_key)
 
-    for k in key_box:
+    for k in excel_key:
         input_query = driver.find_element(By.CSS_SELECTOR, 'input._searchInput_search_text_3CUDs')
         input_query.click()
 
@@ -85,6 +86,7 @@ try:
         time.sleep(1)
 
         input_query.send_keys(k)
+        print(f'키워드 : {k}')
         # input_query.send_keys('비타민')
 
         # pyperclip.copy(keyword)
@@ -92,29 +94,33 @@ try:
         # pyautogui.hotkey('ctrl', 'v')
 
         key_box = driver.find_elements(By.CSS_SELECTOR, 'div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul')
-        # print(len(key_box))
+        print(len(key_box))
 
         print('----- 검색창 연관검색어 -----')
         ws.append(['----- 검색창 연관검색어 -----'])
 
-        for i in range(1, len(key_box) + 1):
-            lis = driver.find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
-            # print(len(lis))
+        time.sleep(1)
+        
+        if len(key_box) != 0:
+            for i in range(1, len(key_box) + 1):
+                lis = driver.find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
+                # print(len(lis))
 
-            for l in lis:
-                try:
-                    title = l.find_element(By.CSS_SELECTOR, 'em').text
-                    # print(title)
-                except:
-                    title = l.find_element(By.CSS_SELECTOR, 'li > a').text
-                    # print(title)
-                
-                print(title)
-                ws.append([today.now(), keyword, title])
+                for l in lis:
+                    try:
+                        title = l.find_element(By.CSS_SELECTOR, 'em').text
+                        # print(title)
+                    except:
+                        title = l.find_element(By.CSS_SELECTOR, 'li > a').text
+                        # print(title)
+                    
+                    print(today.now(), k, title)
+                    ws.append([today.now(), k, title])
 
-        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(1) > li:nth-child(1)
-        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(2) > li
-        #gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child(3) > li:nth-child(1)
+                    # time.sleep(1)
+        else:
+            print('검색창 내 연관검색어가 없습니다.')
+
         time.sleep(1)
 
         search = driver.find_element(By.CSS_SELECTOR, 'button._searchInput_button_search_1n1aw')
@@ -122,21 +128,26 @@ try:
 
         time.sleep(1)
 
-        etc_btn = driver.find_element(By.CSS_SELECTOR, 'button.relatedTags_btn_more__Fdsm1')
-        etc_btn.click()
-
-        time.sleep(1)
-
-        shopping_keyword = driver.find_elements(By.CSS_SELECTOR, '#container > div.relatedTags_relation_tag__Ct0q2 > div > ul > li')
-
         print('----- 쇼핑연관 검색어 -----')
         ws.append(['----- 쇼핑연관 검색어 -----'])
 
-        for s in shopping_keyword:
-            shop_title = s.find_element(By.CSS_SELECTOR, 'li > a').text
+        shopping_keyword = driver.find_elements(By.CSS_SELECTOR, '#container > div.relatedTags_relation_tag__Ct0q2 > div > ul > li')
 
-            print(shop_title)
-            ws.append([today.now(), keyword, shop_title])
+        if len(shopping_keyword) != 0:
+            etc_btn = driver.find_element(By.CSS_SELECTOR, 'button.relatedTags_btn_more__Fdsm1')
+            etc_btn.click()
+
+            time.sleep(1)
+
+            for s in shopping_keyword:
+                shop_title = s.find_element(By.CSS_SELECTOR, 'li > a').text
+
+                print(today.now(), k, shop_title)
+                ws.append([today.now(), k, shop_title])
+
+            # time.sleep(1)
+        else:
+            print('연관 검색어가 없습니다.')
 
         driver.back()
 
