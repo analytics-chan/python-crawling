@@ -55,7 +55,7 @@ if len(key_box) != 0:
         if key_box[i].get_attribute('class') == "":
             # _autoComplete_list_brandstore_1uJCB
             print(key_box[i].get_attribute('class'))
-            lis = key_box[i].find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
+            lis = driver.find_elements(By.CSS_SELECTOR, f'#gnb-gnb > div._gnb_header_area_150KE > div > div._gnbLogo_gnb_logo_3eIAf > div > div._gnbSearch_gnb_search_3O1L2 > form > div._gnbSearch_inner_2Zksb > div:nth-child(2) > div > div._autoComplete_basis_result_1cDj8._autoComplete_active_3_pom > div > ul:nth-child({i}) > li')
             print(len(lis))
 
             # for l in lis:

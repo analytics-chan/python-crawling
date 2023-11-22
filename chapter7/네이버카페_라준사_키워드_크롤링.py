@@ -41,7 +41,7 @@ ws.column_dimensions['B'].width = 25
 ws.column_dimensions['D'].width = 25
 ws.column_dimensions['E'].width = 10
 
-ws.append(['제목', '링크', '댓글수', '작성자', '작성일', '조회수', '키워드'])
+ws.append(['Date', '제목', '링크', '댓글수', '작성자', '작성일', '조회수', '키워드'])
 
 chrome_options = Options()
 chrome_options.add_experimental_option('detach', True)
@@ -120,7 +120,7 @@ for n in range(0, len(noon), 1):
 
                 # print(title, review_count, writer, date, view_count)
 
-                ws.append([title, url + link, int(review_count), writer, date, int(view_count), noon[n]])
+                ws.append([today.now(), title, url + link, int(review_count), writer, date, int(view_count), noon[n]])
                 # ws.append([title, url + link, int(review_count), writer, date, int(view_count), bnb[n]])
 
                 # time.sleep(1)
