@@ -130,6 +130,11 @@ for i in range(2, 1002):
 
         # time.sleep(1)
 
+        # print(date.split('-')[0])
+
+        # if date.split('-')[0] == '2020':
+        #     break
+
     try:            
         if i%10 == 1:
             driver.find_element(By.CLASS_NAME, 'pgR').click()
