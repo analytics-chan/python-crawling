@@ -16,12 +16,19 @@ year = str(today.year)
 month = str(today.month)
 day = str(today.day)
 
+if len(month) == 1:
+    month = '0' + month
+
+if len(day) == 1:
+    day = '0' + day
+
 # keyword = input('검색어를 입력하세요 >>> ')
-keyword = "더와이즈치과병원"
+# keyword = "더와이즈치과병원"
 
 path = 'chapter7'
 file_list = os.listdir(path)
-file_name = f'{year}{month}{day} {keyword}_리뷰.xlsx'
+# file_name = f'{year}{month}{day} {keyword}_리뷰.xlsx'
+file_name = f'{year}{month}{day} 연세힐치과_리뷰.xlsx'
 
 if file_name in file_list:
     wb = load_workbook(os.path.join(path, file_name))
@@ -33,9 +40,9 @@ else:
 ws = wb.active
 
 ws['A1'] = 'Date'
-ws['B1'] = '닉네임'
-ws['C1'] = '작성리뷰수'
-ws['D1'] = '작성일자'
+ws['B1'] = '작성일자'
+ws['C1'] = '닉네임'
+ws['D1'] = '작성리뷰수'
 ws['E1'] = '방문수'
 ws['F1'] = '인증수단'
 ws['G1'] = '내용'
@@ -46,8 +53,11 @@ ws.column_dimensions['C'].width = 10
 ws.column_dimensions['D'].width = 11
 ws.column_dimensions['F'].width = 10
 
-url = f"https://map.naver.com/p/search/{keyword}"
+# url = f"https://map.naver.com/p/search/{keyword}"
 # url = f"https://map.naver.com/p/search/{keyword}/place/33084820?c=15.00,0,0,0,dh&isCorrectAnswer=true"
+
+# 연세힐치과
+url = "https://map.naver.com/p/search/%EC%97%B0%EC%84%B8%ED%9E%90%EC%B9%98%EA%B3%BC%EC%9D%98%EC%9B%90/place/35840179?c=15.00,0,0,0,dh&placePath=%3Fentry%253Dbmp"
 
 chrome_options = Options()
 chrome_options.add_experimental_option('detach', True)
@@ -88,18 +98,18 @@ try:
     while True:
         driver.find_element(By.CSS_SELECTOR, 'body').send_keys(Keys.END)
 
-        time.sleep(1)
+        time.sleep(3)
         
         # driver.find_element(By.XPATH, '//*[@id="app-root"]/div/div/div/div[6]/div[3]/div[3]/div[2]/a').click()
         driver.find_element(By.CSS_SELECTOR, '#app-root > div > div > div > div:nth-child(6) > div:nth-child(3) > div.place_section.k5tcc > div.NSTUp > div > a > span').click()
 
-        time.sleep(1)
+        time.sleep(3)
 
         lis = driver.find_elements(By.CSS_SELECTOR, 'li.YeINN')
         after_len = len(lis)
         print(after_len)
         
-        time.sleep(1)
+        time.sleep(3)
 
         # if after_len == 30:
         #     break
@@ -110,7 +120,7 @@ try:
         before_len = after_len
         print(before_len)
 
-        # if i == 10:
+        # if before_len <= 20:
         #     break
 except Exception as e:
     print('---END---')
@@ -152,50 +162,54 @@ reviews = soup.select('li.YeINN')
 print(len(reviews))
 
 for review in reviews:
-    nick = review.select_one('div.VYGLG').text
-
     try:
-        review_cnt = review.select_one('span.Eu5rp').text[2:].strip()
-    except:
-        review_cnt = 0
-    
-    try:
-        user_review = review.select_one('div.ZZ4OK > a > span.zPfVt').text.replace('\n', ' ')
-    except:
-        user_review = ""
+        nick = review.select_one('div.VYGLG').text
 
-    try:
-        ymd = review.select_one('div._7kR3e > span:nth-child(1) > span:nth-child(3)').text[:-4]
-
-        yy = ymd.split('년')[0].strip()
-        mm = ymd.split('년')[1].split('월')[0].strip()
-        dd = ymd.split('년')[1].split('월')[1][:-1].strip()
+        try:
+            review_cnt = review.select_one('span.Eu5rp').text[2:].strip()
+        except:
+            review_cnt = 0
         
-        if len(mm) == 1:
-            mm = '0' + mm
-        
-        if len(dd) == 1:
-            dd = '0' + dd
+        try:
+            user_review = review.select_one('div.ZZ4OK > a > span.zPfVt').text.replace('\n', ' ')
+        except:
+            user_review = ""
 
-        write_date = f'{yy}-{mm}-{dd}'
+        try:
+            ymd = review.select_one('div._7kR3e > span:nth-child(1) > span:nth-child(3)').text[:-4]
+
+            yy = ymd.split('년')[0].strip()
+            mm = ymd.split('년')[1].split('월')[0].strip()
+            dd = ymd.split('년')[1].split('월')[1][:-1].strip()
+            
+            if len(mm) == 1:
+                mm = '0' + mm
+            
+            if len(dd) == 1:
+                dd = '0' + dd
+
+            write_date = f'{yy}-{mm}-{dd}'
+        except:
+            write_date = ""
+
+        try:
+            visit = review.select_one('div._7kR3e > span:nth-child(2)').text[:-5]
+        except:
+            visit = ""
+
+        try:
+            cert = review.select_one('div._7kR3e > span:nth-child(3)').text[5:]
+        except:
+            cert = ""
+
+        print(nick, review_cnt, write_date, visit, cert, user_review)
+        ws.append([today.now(), write_date, nick, int(review_cnt), int(visit), cert, user_review])
+
     except:
-        write_date = ""
-
-    try:
-        visit = review.select_one('div._7kR3e > span:nth-child(2)').text[:-5]
-    except:
-        visit = ""
-
-    try:
-        cert = review.select_one('div._7kR3e > span:nth-child(3)').text[5:]
-    except:
-        cert = ""
-
-    print(nick, review_cnt, write_date, visit, cert, user_review)
-    ws.append([today.now(), nick, int(review_cnt), write_date, int(visit), cert, user_review])
+        clean_bot = "임시 게시 중단"
+        ws.append([today.now(), clean_bot])
 
 end_txt = f"{today.now()} 크롤링 완료"
 ws.append([end_txt])
 
 wb.save(os.path.join(path, file_name))
-
