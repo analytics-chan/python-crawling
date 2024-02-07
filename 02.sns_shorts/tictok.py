@@ -8,11 +8,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
 import time
-import datetime
+from datetime import datetime, timedelta
 import os
 from openpyxl import Workbook, load_workbook
 
-today = datetime.datetime.today()
+today = datetime.today()
 year = str(today.year)
 month = str(today.month)
 day = str(today.day)
@@ -71,29 +71,6 @@ time.sleep(1)
 gue.click()
 
 
-# test_1
-# shorts = driver.find_elements(By.CSS_SELECTOR, '#main-content-homepage_hot > div.css-9fq6q2-DivOneColumnContainer.e108hwin0 > div')
-# print(len(shorts))
-
-#loginContainer > div > div > div.css-txolmk-DivGuestModeContainer.exd0a435 > div > div > div > div > div
-#loginContainer > div > div > div.css-txolmk-DivGuestModeContainer.exd0a435 > div > div.css-u3m0da-DivBoxContainer.e1cgu1qo0 > div > div > div
-
-# for s in shorts:
-#     id = s.find_element(By.CSS_SELECTOR, 'a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0 > h3').text
-#     link = s.find_element(By.CSS_SELECTOR, 'a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0').get_attribute('href')
-
-#     print(id, link)
-
-#main-content-homepage_hot > div.css-9fq6q2-DivOneColumnContainer.e108hwin0 > div:nth-child(1) > div > div.css-1hhj6ie-DivTextInfoContainer.etvrc4k7 > div.css-1mnwhn0-DivAuthorContainer.etvrc4k6 > a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0 > h3
-#main-content-homepage_hot > div.css-9fq6q2-DivOneColumnContainer.e108hwin0 > div:nth-child(2) > div > div.css-1hhj6ie-DivTextInfoContainer.etvrc4k7 > div.css-1mnwhn0-DivAuthorContainer.etvrc4k6 > a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0 > h3
-    
-#main-content-homepage_hot > div.css-9fq6q2-DivOneColumnContainer.e108hwin0 > div:nth-child(1) > div > div.css-1hhj6ie-DivTextInfoContainer.etvrc4k7 > div.css-1mnwhn0-DivAuthorContainer.etvrc4k6 > a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0
-#main-content-homepage_hot > div.css-9fq6q2-DivOneColumnContainer.e108hwin0 > div:nth-child(2) > div > div.css-1hhj6ie-DivTextInfoContainer.etvrc4k7 > div.css-1mnwhn0-DivAuthorContainer.etvrc4k6 > a.emt6k1z1.css-1ew4g6u-StyledLink-StyledAuthorAnchor.er1vbsz0
-
-# test_2
-
-#xgwrapper-0-7302336016243838251 > video
-
 time.sleep(2)
 
 vi = driver.find_element(By.CSS_SELECTOR, 'div.e1yey0rl2 > div > video')
@@ -116,11 +93,39 @@ def info():
 
     review_count = driver.find_element(By.CSS_SELECTOR, 'div.e1aa9wve2').text
 
-    link = driver.find_element(By.CSS_SELECTOR, 'div.ehlq8k33 > p.ehlq8k34').text
+    # link = driver.find_element(By.CSS_SELECTOR, 'div.ehlq8k33 > p.ehlq8k34').text
+    link = driver.current_url
+
+    # now = datetime.now()
+
+    # # 날짜 포맷 변경 함수
+    # def convert_date_format(date_str):
+    #     parts = date_str.split('-')
+    #     month, day = map(int, parts)
+    #     return now.replace(month=month, day=day).strftime("%Y-%m-%d")
+
+    # ymd = convert_date_format(wr_date)
+    # print(ymd)
+
+    # # 날짜 데이터 전처리
+    # if len(wr_date) >= 5:
+    #     yymmdd = f"wr_date = \'{convert_date_format(wr_date)}\'"
+
+    # if "시간전" in wr_date:
+    #     hours = int(wr_date.split('시간전')[0])
+    #     result_c = now - timedelta(hours=hours)
+    #     yymmdd = f"wr_date = {result_c.strftime('%Y-%m-%d')}"
+
+    # if "주전" in wr_date:
+    #     weeks = int(wr_date.split('주전')[0])
+    #     result_d = now - timedelta(weeks=weeks)
+    #     yymmdd = f"wr_date = {result_d.strftime('%Y-%m-%d')}"
 
 
     print(id, content, wr_date, like, review_count[4:-1], save, link)
     ws.append([today.now(), id, content, wr_date, like, int(review_count[4:-1]), save, link])
+
+    wb.save(os.path.join(path, file_name))
 
 #app > div.css-14dcx2q-DivBodyContainer.e1irlpdw0 > div:nth-child(4) > div > div.css-1qjw4dg-DivContentContainer.e1mecfx00 > div.css-13if7zh-DivCommentContainer.ekjxngi0 > div > div.css-1xlna7p-DivProfileWrapper.ekjxngi4 > div.css-pcqxr7-DivDescriptionContentWrapper.e1mecfx011 > div.css-85dfh6-DivInfoContainer.evv7pft0 > a.evv7pft4.css-n2qh4e-StyledLink-StyledLink.er1vbsz0 > span.css-1c7urt-SpanUniqueId.evv7pft1 > span
 #app > div.css-14dcx2q-DivBodyContainer.e1irlpdw0 > div:nth-child(4) > div > div.css-1qjw4dg-DivContentContainer.e1mecfx00 > div.css-13if7zh-DivCommentContainer.ekjxngi0 > div > div.css-1xlna7p-DivProfileWrapper.ekjxngi4 > div.css-pcqxr7-DivDescriptionContentWrapper.e1mecfx011 > div.css-85dfh6-DivInfoContainer.evv7pft0 > a.evv7pft4.css-n2qh4e-StyledLink-StyledLink.er1vbsz0 > span.css-1c7urt-SpanUniqueId.evv7pft1 > span
@@ -144,7 +149,7 @@ while True:
 
     time.sleep(2)
 
-    print('i는 몇번째? >>> ', i)
+    print('i는 몇번째? >>> ', i)    
 
     if i >= 10:
         break
