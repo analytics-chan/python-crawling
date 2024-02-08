@@ -79,10 +79,12 @@ exp = driver.find_element(By.CSS_SELECTOR, '#items > ytd-menu-service-item-rende
 exp.click()
 time.sleep(1)
 
-etc2 = driver.find_element(By.CSS_SELECTOR, '#more > yt-formatted-string')
-etc2.click()
-time.sleep(1)
-
+try:
+    etc2 = driver.find_element(By.CSS_SELECTOR, '#more > yt-formatted-string')
+    etc2.click()
+    time.sleep(1)
+except:
+    pass
 
 # div#container > div#text-container > yt-formatted-string#text > a.yt-simple-endpoint.style-scope.yt-formatted-string
 # id = driver.find_element(By.CSS_SELECTOR, 'div#container > div#text-container > yt-formatted-string#text > a.yt-simple-endpoint.style-scope.yt-formatted-string').get_attribute('href')
