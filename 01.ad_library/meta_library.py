@@ -11,6 +11,7 @@ import time
 import datetime
 import os
 from openpyxl import Workbook, load_workbook
+import pyperclip
 
 today = datetime.datetime.today()
 year = str(today.year)
@@ -22,7 +23,7 @@ keyword = input('검색어를 입력해주세요 >>> ')
 # url = "https://ko-kr.facebook.com/ads/library/?active_status=all&ad_type=all&country=KR&media_type=all"
 url = f"https://ko-kr.facebook.com/ads/library/?active_status=all&ad_type=all&country=KR&q={keyword}&search_type=keyword_unordered&media_type=all"
 
-path = 'ad_library'
+path = '01.ad_library'
 file_list = os.listdir(path)
 file_name = f'{year}{month}{day} 페이스북_광고라이브러리.xlsx'
 
@@ -65,7 +66,7 @@ while True:
     print('스크롤 후 >>> ', new_height)
 
     # if new_height == last_height:
-    if new_height >= 5000:
+    if new_height >= 1000:
         break
     last_height = new_height
 
@@ -92,10 +93,29 @@ for i, lib in enumerate(lib_box, 1):
     title = lib.find_element(By.CSS_SELECTOR, 'span.x8t9es0.x1fvot60.xxio538.x108nfp6.xq9mrsl.x1h4wwuj.x117nqv4.xeuugli').text
     cont = lib.find_element(By.CSS_SELECTOR, 'div > div.xh8yej3 > div > div > div.x6ikm8r.x10wlt62 > div > span > div > div > div').text
 
+    etc = lib.find_element(By.CSS_SELECTOR, 'div.xtwfq29')
+    etc.click()
+
+    time.sleep(1)
+
+    txt_copy = lib.find_element(By.CSS_SELECTOR, 'div.x1iyjqo2.xamitd3')
+    
+
+    txt_copy.click()
+
+    pyperclip.copy(txt_copy)
+
+    copy_test = pyperclip.paste()
+    print(copy_test)
+
+    time.sleep(1)
+
     # print(dat, title, img, cont)
     # print(title, img, cont)
     print(f'{i}번째 글')
     ws.append([today.now(), title, img, '', cont])
+
+    wb.save(os.path.join(path, file_name))
     # print(dat)
 
 wb.save(os.path.join(path, file_name))
@@ -103,3 +123,5 @@ wb.save(os.path.join(path, file_name))
 # #content > div > div:nth-child(1) > div > div.x8bgqxi.x1n2onr6 > div._8n_0 > div:nth-child(2) > div.x1dr75xp.xh8yej3.x16md763 > div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div:nth-child(1) > div > div.xh8yej3 > div > div > div.x6ikm8r.x10wlt62 > div > span > div > div > div > span
 # #content > div > div:nth-child(1) > div > div.x8bgqxi.x1n2onr6 > div._8n_0 > div:nth-child(2) > div.x1dr75xp.xh8yej3.x16md763 > div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div:nth-child(2) > div > div.xh8yej3 > div > div > div.x6ikm8r.x10wlt62 > div > span > div > div > div
     
+    
+
